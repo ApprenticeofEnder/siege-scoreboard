@@ -1,0 +1,8 @@
+{% from "components/badge.html" import badge %}
+{% from "components/table.html" import tr_open, tr_close, td %}
+{{ tr_open() }}
+  {{ td(timestamp) }}
+  {{ td(tick|string) }}
+  {{ td(team) }}
+  {{ td(badge(("+" if delta > 0 else "") ~ delta|string, variant="default" if delta >= 0 else "destructive")) }}
+{{ tr_close() }}

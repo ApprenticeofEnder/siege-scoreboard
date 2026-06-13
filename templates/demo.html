@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "components/badge.html" import badge %}
+{% from "components/card.html" import card_open, card_close,
+  card_header_open, card_header_close,
+  card_title, card_description,
+  card_action_open, card_action_close,
+  card_content_open, card_content_close %}
+{% from "components/table.html" import table_open, table_close, thead_open, thead_close, tr_open, tr_close, th %}
+
+{% block title %}{{ title }} · Siege Scoreboard{% endblock %}
+{% block heading %}{{ title }}{% endblock %}
+
+{% block content %}
+  {{ card_open() }}
+    {{ card_header_open() }}
+      {{ card_title(title) }}
+      {{ card_description("Synthetic score events streamed over HTMX SSE.") }}
+      {{ card_action_open() }}
+        {{ badge("Live", variant="secondary") }}
+      {{ card_action_close() }}
+    {{ card_header_close() }}
+    {{ card_content_open() }}
+      {{ table_open() }}
+        {{ thead_open() }}
+          {{ tr_open() }}
+            {{ th("Time") }}
+            {{ th("Tick") }}
+            {{ th("Team") }}
+            {{ th("Delta") }}
+          {{ tr_close() }}
+        {{ thead_close() }}
+        <tbody
+          data-slot="table-body"
+          class="[&_tr:last-child]:border-0"
+          hx-sse:connect="/events"
+          hx-swap="beforeend"
+        ></tbody>
+      {{ table_close() }}
+    {{ card_content_close() }}
+  {{ card_close() }}
+{% endblock %}

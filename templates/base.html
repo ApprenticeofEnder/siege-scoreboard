@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" class="{{ 'dark' if theme == 'dark' else '' }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Siege Scoreboard{% endblock %}</title>
+    <script>
+      (function () {
+        const match = document.cookie.match(/(?:^|; )theme=([^;]*)/);
+        const theme = match ? decodeURIComponent(match[1]) : "system";
+        const dark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      })();
+    </script>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="https://unpkg.com/htmx.org@4.0.0-beta4/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@4.0.0-beta4/dist/ext/hx-sse.js"></script>
+  </head>
+  <body class="min-h-screen antialiased">
+    <header class="border-b">
+      <div class="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-4">
+        <div>
+          <p class="text-sm text-muted-foreground">Siege Scoreboard</p>
+          <h1 class="text-lg font-semibold">
+            {% block heading %}Demo{% endblock %}
+          </h1>
+        </div>
+        {% from "components/theme-toggle.html" import theme_toggle %}
+        {{ theme_toggle(value=theme) }}
+      </div>
+    </header>
+    <main class="mx-auto max-w-4xl px-6 py-8">
+      {% block content %}{% endblock %}
+    </main>
+    <script>
+      function applyTheme(theme) {
+        const dark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+        document.cookie =
+          "theme=" + encodeURIComponent(theme) + "; path=/; max-age=31536000; samesite=lax";
+      }
+
+      document.querySelectorAll('input[name="theme"]').forEach((input) => {
+        input.addEventListener("change", (event) => {
+          applyTheme(event.target.value);
+        });
+      });
+
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", () => {
+          const selected = document.querySelector('input[name="theme"]:checked');
+          if (selected && selected.value === "system") {
+            applyTheme("system");
+          }
+        });
+    </script>
+  </body>
+</html>

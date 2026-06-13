@@ -1,0 +1,8 @@
+.devenv/
+.direnv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.venv/
+node_modules/
+app/static/styles.css
