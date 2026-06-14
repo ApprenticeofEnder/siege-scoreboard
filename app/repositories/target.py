@@ -1,12 +1,13 @@
 from sqlmodel import Session, col, delete, select
 
-from app.models.schedule import TargetScheduleEntry
-from app.models.target import Target
+from app.models.target import Target, TargetScheduleEntry
 from app.repositories._helpers import require_id, target_to_dto
 from app.schemas.target import TargetDTO
 
 
 class TargetRepository:
+    _session: Session
+
     def __init__(self, session: Session) -> None:
         self._session = session
 

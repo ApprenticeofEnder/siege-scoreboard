@@ -1,9 +1,7 @@
-# pyright: reportUndefinedVariable=false
-
 from datetime import datetime
 
 from sqlalchemy import UniqueConstraint
-from sqlmodel import Constraint, Field, Relationship, SQLModel
+from sqlmodel import Constraint, Field, SQLModel
 
 
 class TickSubmission(SQLModel, table=True):
@@ -16,11 +14,6 @@ class TickSubmission(SQLModel, table=True):
     team_id: int = Field(foreign_key="teams.id")
     tick: int
     submitted_at: datetime | None = None
-
-    team: "Team" = Relationship(back_populates="tick_submissions")
-    attack_records: list["AttackRecordRow"] = Relationship(
-        back_populates="tick_submission"
-    )
 
 
 class AttackRecordRow(SQLModel, table=True):
@@ -39,6 +32,3 @@ class AttackRecordRow(SQLModel, table=True):
     target_id: int = Field(foreign_key="targets.id")
     request_id: int
     result: int
-
-    tick_submission: TickSubmission = Relationship(back_populates="attack_records")
-    target: "Target" = Relationship(back_populates="attack_records")

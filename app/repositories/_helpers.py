@@ -2,8 +2,7 @@ from collections import defaultdict
 from collections.abc import Sequence
 from typing import Protocol
 
-from app.models.schedule import TargetScheduleEntry
-from app.models.target import Target
+from app.models.target import Target, TargetScheduleEntry
 from app.models.team import Team
 from app.models.tick import AttackRecordRow, TickSubmission
 from app.schemas.attack import AttackRecord, AttackResult

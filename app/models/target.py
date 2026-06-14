@@ -1,6 +1,5 @@
-# pyright: reportUndefinedVariable=false
-
-from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy import UniqueConstraint
+from sqlmodel import Constraint, Field, SQLModel
 
 
 class Target(SQLModel, table=True):
@@ -16,7 +15,19 @@ class Target(SQLModel, table=True):
     vulns: int
     req_per_tick: int
 
-    schedule_entries: list["TargetScheduleEntry"] = Relationship(
-        back_populates="target"
+
+class TargetScheduleEntry(SQLModel, table=True):
+    __tablename__: str = "target_schedule_entries"
+    __table_args__: tuple[Constraint] = (
+        UniqueConstraint(
+            "target_id",
+            "tick",
+            "request_id",
+            name="uq_target_schedule_entries_target_tick_request",
+        ),
     )
-    attack_records: list["AttackRecordRow"] = Relationship(back_populates="target")
+
+    id: int | None = Field(default=None, primary_key=True)
+    target_id: int = Field(foreign_key="targets.id")
+    tick: int
+    request_id: int

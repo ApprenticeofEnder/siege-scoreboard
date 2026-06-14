@@ -4,8 +4,7 @@ import pytest
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.models.schedule import TargetScheduleEntry
-from app.models.target import Target
+from app.models.target import Target, TargetScheduleEntry
 from app.models.team import Team
 from app.models.tick import AttackRecordRow, TickSubmission
 from app.repositories._helpers import require_id

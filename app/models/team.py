@@ -1,6 +1,6 @@
 # pyright: reportUndefinedVariable=false
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, SQLModel
 
 
 class Team(SQLModel, table=True):
@@ -10,5 +10,3 @@ class Team(SQLModel, table=True):
     name: str
     email: str | None = None
     bot_signing_key_pem: str
-
-    tick_submissions: list["TickSubmission"] = Relationship(back_populates="team")
