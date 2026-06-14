@@ -1,12 +1,9 @@
-# pyright: reportUndefinedVariable=false
-
-from sqlmodel import Field, SQLModel
+from app.models.base import BaseDbModelWithId
 
 
-class Team(SQLModel, table=True):
+class Team(BaseDbModelWithId, table=True):
     __tablename__: str = "teams"
 
-    id: int | None = Field(default=None, primary_key=True)
     name: str
     email: str | None = None
     bot_signing_key_pem: str
