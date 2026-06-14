@@ -1,0 +1,23 @@
+services:
+  - name: WebVault
+    folder: webvault
+    file: attacker.py
+    cls: WebVaultAttacker
+    address: "127.0.0.1:5001"
+    description: "A vulnerable web vault service"
+    vulns: 2
+    req_per_tick: 4
+    schedule:
+      0: [1, 2, -1, -2]
+      1: [1, 2, -1, -2]
+  - name: FileStore
+    folder: filestore
+    file: attacker.py
+    cls: FileStoreAttacker
+    address: "127.0.0.1:5002"
+    description: "A vulnerable file storage service"
+    vulns: 2
+    req_per_tick: 4
+    schedule:
+      0: [1, 2, -1, -2]
+      1: [1, 2, -1, -2]

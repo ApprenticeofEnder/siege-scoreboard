@@ -32,6 +32,7 @@ in {
 
   env = {
     APP_PORT = toString config.processes.api.ports.http.value;
+    DATABASE_URL = "sqlite:///./data/scoreboard.db";
   };
 
   tasks."css:build" = {

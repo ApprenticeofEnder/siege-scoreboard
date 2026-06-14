@@ -1,0 +1,13 @@
+keys:
+  - |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIBOgIBAAJBALexampleKeyForAlphaTeamOnlyForLocalDevTesting
+    -----END RSA PRIVATE KEY-----
+  - |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIBOgIBAAJBALexampleKeyForBravoTeamOnlyForLocalDevTesting
+    -----END RSA PRIVATE KEY-----
+  - |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIBOgIBAAJBALexampleKeyForCharlieTeamOnlyForLocalDevTesting
+    -----END RSA PRIVATE KEY-----
