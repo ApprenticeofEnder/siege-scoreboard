@@ -1,12 +1,9 @@
+# pyright: reportUndefinedVariable=false
+
 from datetime import datetime
-from typing import TYPE_CHECKING
 
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Constraint, Field, Relationship, SQLModel
-
-if TYPE_CHECKING:
-    from app.models.target import Target
-    from app.models.team import Team
 
 
 class TickSubmission(SQLModel, table=True):

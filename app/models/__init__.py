@@ -1,10 +1,10 @@
 from app.models.schedule import TargetScheduleEntry
 from app.models.target import Target
 from app.models.team import Team
-from app.models.tick import AttackRecord, TickSubmission
+from app.models.tick import AttackRecordRow, TickSubmission
 
 __all__ = [
-    "AttackRecord",
+    "AttackRecordRow",
     "Target",
     "TargetScheduleEntry",
     "Team",

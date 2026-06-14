@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING
+# pyright: reportUndefinedVariable=false
 
 from sqlalchemy import UniqueConstraint
 from sqlmodel import Constraint, Field, Relationship, SQLModel
-
-if TYPE_CHECKING:
-    from app.models.target import Target
 
 
 class TargetScheduleEntry(SQLModel, table=True):

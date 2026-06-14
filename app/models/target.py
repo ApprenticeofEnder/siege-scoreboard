@@ -1,14 +1,6 @@
-from collections import defaultdict
-from collections.abc import Sequence
-from typing import TYPE_CHECKING
+# pyright: reportUndefinedVariable=false
 
 from sqlmodel import Field, Relationship, SQLModel
-
-from app.schemas import TargetDTO
-
-if TYPE_CHECKING:
-    from app.models.schedule import TargetScheduleEntry
-    from app.models.tick import AttackRecordRow
 
 
 class Target(SQLModel, table=True):
@@ -27,17 +19,4 @@ class Target(SQLModel, table=True):
     schedule_entries: list["TargetScheduleEntry"] = Relationship(
         back_populates="target"
     )
-    attack_records: list["AttackRecord"] = Relationship(back_populates="target")
-
-    def to_dto(self, schedule_entries: Sequence["TargetScheduleEntry"]) -> TargetDTO:
-        assert self.id is not None
-        schedule: dict[int, list[int]] = defaultdict(list)
-        for entry in schedule_entries:
-            schedule[entry.tick].append(entry.request_id)
-        for tick in schedule:
-            schedule[tick].sort()
-
-        return TargetDTO(
-            **self.model_dump(exclude={"schedule_entries", "attack_records"}),
-            schedule=schedule,
-        )
+    attack_records: list["AttackRecordRow"] = Relationship(back_populates="target")
