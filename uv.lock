@@ -510,7 +510,6 @@ dependencies = [
     { name = "jinja2" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
-    { name = "sortedcontainers-pydantic" },
     { name = "sqlmodel" },
     { name = "structlog" },
     { name = "uvicorn", extra = ["standard"] },
@@ -519,9 +518,11 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "basedpyright" },
+    { name = "ruff" },
+]
+test = [
     { name = "faker" },
     { name = "pytest" },
-    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -531,7 +532,6 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1" },
     { name = "pydantic-settings", specifier = ">=2.7" },
     { name = "pyyaml", specifier = ">=6.0" },
-    { name = "sortedcontainers-pydantic", specifier = ">=2.0.0" },
     { name = "sqlmodel", specifier = ">=0.0.22" },
     { name = "structlog", specifier = ">=26.1.0" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.32" },
@@ -540,32 +540,11 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "basedpyright", specifier = ">=1.39.8" },
-    { name = "faker", specifier = ">=40.23.0" },
-    { name = "pytest", specifier = ">=9.0.3" },
     { name = "ruff", specifier = ">=0.8" },
 ]
-
-[[package]]
-name = "sortedcontainers"
-version = "2.4.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f23394729afe52f3bf7adec04bf9ed2c820b39e19299111/sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88", size = 30594, upload-time = "2021-05-16T22:03:42.897Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0", size = 29575, upload-time = "2021-05-16T22:03:41.177Z" },
-]
-
-[[package]]
-name = "sortedcontainers-pydantic"
-version = "2.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pydantic" },
-    { name = "pydantic-core" },
-    { name = "sortedcontainers" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f5/39/c951f89cd289d207730d080ce24d973db18227ea09ba966e4fab9d75dab4/sortedcontainers_pydantic-2.0.0.tar.gz", hash = "sha256:0cb3abfbda64dc1fa2365b578ddc3a259c7d75daeae76d2f9087f5ebc1f8f1fe", size = 53829, upload-time = "2025-04-18T06:51:10.706Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/ef/a3a7cce565dcd624c5fd457709c0356038288eee1268d7efbb11376f6690/sortedcontainers_pydantic-2.0.0-py3-none-any.whl", hash = "sha256:1c38a05f1a8618189bdd8b87f0c3bc8cc1196e6c39f0e30f694b709ba3e2a508", size = 6446, upload-time = "2025-04-18T06:51:09.553Z" },
+test = [
+    { name = "faker", specifier = ">=40.23.0" },
+    { name = "pytest", specifier = ">=9.0.3" },
 ]
 
 [[package]]
