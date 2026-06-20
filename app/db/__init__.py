@@ -2,7 +2,7 @@ from collections.abc import Generator
 
 from sqlmodel import Session, SQLModel
 
-from app.engine import engine
+from app.db.engine import engine
 
 
 def create_db_and_tables() -> None:
