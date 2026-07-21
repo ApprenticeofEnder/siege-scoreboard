@@ -88,8 +88,9 @@ def test_at_tick_sparse_gte(existing_target: Target):
     existing_target.init_schedule()
     assert existing_target.schedule is not None
 
-    existing_target.upsert_schedule_entry(1, [1, 2])
-    existing_target.upsert_schedule_entry(5, [3, 4])
+    schedule = {1: [1, 2], 5: [3, 4]}
+
+    _ = existing_target.upsert_schedule_entries(schedule)
 
     tick_one_attacks = existing_target.schedule.at_tick(3)
     assert tick_one_attacks is not None
@@ -102,25 +103,23 @@ def test_at_tick_sparse_gte(existing_target: Target):
     assert existing_target.schedule.at_tick(0) is None
 
 
-def test_at_tick_insertion_order_independent(existing_target: Target):
+@pytest.mark.parametrize(
+    "schedule_inputs", [{5: [3, 4], 1: [1, 2]}, {1: [1, 2], 5: [3, 4]}]
+)
+def test_at_tick_insertion_order_independent(
+    existing_target: Target, schedule_inputs: dict[int, list[int]]
+):
     existing_target.init_schedule()
     assert existing_target.schedule is not None
 
-    schedule_first = AttackSchedule(target_id=existing_target.id)
-    schedule_first.upsert_entry(5, [3, 4])
-    schedule_first.upsert_entry(1, [1, 2])
+    schedule = AttackSchedule(target_id=existing_target.id)
+    for tick, requests in schedule_inputs.items():
+        assert schedule.upsert_entry(tick, requests)
 
-    schedule_second = AttackSchedule(target_id=existing_target.id)
-    schedule_second.upsert_entry(1, [1, 2])
-    schedule_second.upsert_entry(5, [3, 4])
+    attacks = schedule.at_tick(6)
 
-    first_attacks = schedule_first.at_tick(6)
-    second_attacks = schedule_second.at_tick(6)
-
-    assert first_attacks is not None
-    assert second_attacks is not None
-    assert [attack.request_id for attack in first_attacks] == [3, 4]
-    assert [attack.request_id for attack in second_attacks] == [3, 4]
+    assert attacks is not None
+    assert [attack.request_id for attack in attacks] == [3, 4]
 
 
 def test_upsert_overwrite_returns_false(existing_target: Target):
@@ -132,7 +131,7 @@ def test_upsert_overwrite_returns_false(existing_target: Target):
 
 def test_upsert_without_schedule_raises(new_target: Target):
     with pytest.raises(ScheduleNotInitializedError):
-        new_target.upsert_schedule_entry(1, [1, 2])
+        _ = new_target.upsert_schedule_entry(1, [1, 2])
 
 
 def test_init_schedule_without_id_raises(new_target: Target):

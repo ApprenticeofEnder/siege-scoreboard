@@ -16,6 +16,13 @@ class Target(BaseModel):
 
     schedule: "AttackSchedule | None" = None
 
+    def upsert_schedule_entries(self, entries: dict[int, list[int]]) -> dict[int, bool]:
+        result = {
+            tick: self.upsert_schedule_entry(tick, requests)
+            for tick, requests in entries.items()
+        }
+        return result
+
     def upsert_schedule_entry(self, tick: int, requests: list[int]) -> bool:
         if self.schedule is None:
             raise ScheduleNotInitializedError(
@@ -57,6 +64,13 @@ class AttackSchedule(BaseModel):
 
     target_id: PositiveInt | None = None
     entries: dict[int, list[TargetAttack]] = {}
+
+    def upsert_entries(self, entries: dict[int, list[int]]) -> dict[int, bool]:
+        result = {
+            tick: self.upsert_entry(tick, requests)
+            for tick, requests in entries.items()
+        }
+        return result
 
     def upsert_entry(self, tick: int, requests: list[int]) -> bool:
         tick_exists = tick in self.entries
