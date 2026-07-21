@@ -2,10 +2,11 @@ from pydantic import BaseModel, NegativeInt, PositiveInt, computed_field
 
 from app.domain.enums.attack import AttackType
 from app.domain.exceptions import ScheduleNotInitializedError, TargetNotPersistedError
+from app.domain.values.database_id import DatabaseId
 
 
 class Target(BaseModel):
-    id: PositiveInt | None = None
+    id: DatabaseId | None = None
     name: str
     folder: str
     file: str
@@ -43,7 +44,7 @@ NonZeroInt = PositiveInt | NegativeInt
 
 
 class TargetAttack(BaseModel):
-    target_id: PositiveInt | None = None
+    target_id: DatabaseId | None = None
     request_id: NonZeroInt
     """
     ID of the request (attack) to be sent. 
@@ -60,9 +61,9 @@ class TargetAttack(BaseModel):
 
 
 class AttackSchedule(BaseModel):
-    id: PositiveInt | None = None
+    id: DatabaseId | None = None
 
-    target_id: PositiveInt | None = None
+    target_id: DatabaseId | None = None
     entries: dict[int, list[TargetAttack]] = {}
 
     def upsert_entries(self, entries: dict[int, list[int]]) -> dict[int, bool]:

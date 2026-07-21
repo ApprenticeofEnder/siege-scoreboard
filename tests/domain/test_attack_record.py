@@ -28,3 +28,6 @@ def test_scoring(
 ):
     attack_record = create_attack_record(is_malicious=is_malicious, result=result)
     assert attack_record.points == expected
+
+
+# TODO: more tests around validation

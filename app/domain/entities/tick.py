@@ -1,12 +1,13 @@
 from datetime import datetime
 
-from pydantic import BaseModel, NonNegativeInt, PositiveInt
+from pydantic import BaseModel, NonNegativeInt
 
 from app.domain.exceptions import TickOrderingError
+from app.domain.values.database_id import DatabaseId
 
 
 class Tick(BaseModel):
-    id: PositiveInt | None = None
+    id: DatabaseId = None
 
     tick_num: NonNegativeInt
     timestamp: datetime

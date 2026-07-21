@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Protocol
+from uuid import uuid4
 
 import pytest
 from faker import Faker
@@ -8,6 +9,7 @@ from app.domain.entities.attack_record import AttackRecord
 from app.domain.entities.target import Target
 from app.domain.entities.tick import Tick
 from app.domain.enums.attack import AttackResult, AttackType
+from app.domain.values.database_id import DatabaseId
 
 
 def random_string(faker: Faker, prefix: str = "") -> str:
@@ -18,7 +20,7 @@ class TargetFactory(Protocol):
     def __call__(
         self,
         *,
-        id: int | None = None,
+        id: DatabaseId = None,
         name: str | None = None,
         folder: str | None = None,
         file: str = "attacker.py",
@@ -33,11 +35,11 @@ class AttackRecordFactory(Protocol):
     def __call__(
         self,
         *,
-        target_id: int | None = None,
+        target_id: DatabaseId = None,
         request_id: int | None = None,
         is_malicious: bool | None = None,
-        tick_id: int | None = None,
-        team_id: int | None = None,
+        tick_id: DatabaseId = None,
+        team_id: DatabaseId = None,
         result: AttackResult | None = None,
     ) -> AttackRecord: ...
 
@@ -46,7 +48,7 @@ class TickFactory(Protocol):
     def __call__(
         self,
         *,
-        id: int | None = None,
+        id: DatabaseId = None,
         tick_num: int | None = None,
         timestamp: datetime | None = None,
     ) -> Tick: ...
@@ -55,7 +57,7 @@ class TickFactory(Protocol):
 @pytest.fixture(name="create_target")
 def fixture_create_target(faker: Faker) -> TargetFactory:
     def _create_target(
-        id: int | None = None,
+        id: DatabaseId = None,
         name: str | None = None,
         folder: str | None = None,
         file: str = "attacker.py",
@@ -101,11 +103,11 @@ def fixture_create_attack_record(
             return AttackType.BENIGN
 
     def _create_attack_record(
-        target_id: int | None = None,
+        target_id: DatabaseId = None,
         request_id: int | None = None,
         is_malicious: bool | None = None,
-        tick_id: int | None = None,
-        team_id: int | None = None,
+        tick_id: DatabaseId = None,
+        team_id: DatabaseId = None,
         result: AttackResult | None = None,
     ) -> AttackRecord:
         target_id = target_id or existing_target.id
@@ -114,8 +116,8 @@ def fixture_create_attack_record(
             request_type = _determine_request_type(is_malicious)
             request_id = faker.random_digit_not_null() * request_type
 
-        tick_id = tick_id or faker.random_digit_not_null()
-        team_id = team_id or faker.random_digit_not_null()
+        tick_id = tick_id or uuid4()
+        team_id = team_id or uuid4()
         result = result or faker.random_element(AttackResult)
 
         return AttackRecord(
@@ -132,7 +134,7 @@ def fixture_create_attack_record(
 @pytest.fixture(name="create_tick")
 def fixture_create_tick(faker: Faker) -> TickFactory:
     def _create_tick(
-        id: int | None = None,
+        id: DatabaseId = None,
         tick_num: int | None = None,
         timestamp: datetime | None = None,
     ) -> Tick:
@@ -152,10 +154,10 @@ def fixture_new_target(create_target: TargetFactory):
 
 
 @pytest.fixture(name="target_id")
-def fixture_target_id(faker: Faker):
-    return faker.random_digit_not_null_or_empty()
+def fixture_target_id():
+    return uuid4()
 
 
 @pytest.fixture(name="existing_target")
-def fixture_existing_target(create_target: TargetFactory, target_id: int):
+def fixture_existing_target(create_target: TargetFactory, target_id: DatabaseId):
     return create_target(id=target_id)

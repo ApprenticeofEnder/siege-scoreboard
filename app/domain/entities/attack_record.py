@@ -1,12 +1,13 @@
-from pydantic import PositiveInt, computed_field
+from pydantic import computed_field
 
 from app.domain.entities.target import TargetAttack
 from app.domain.enums.attack import AttackResult
+from app.domain.values.database_id import NonNullDatabaseId
 
 
 class AttackRecord(TargetAttack):
-    tick_id: PositiveInt
-    team_id: PositiveInt
+    tick_id: NonNullDatabaseId
+    team_id: NonNullDatabaseId
     result: AttackResult
     """Did the attack succeed, fail, or was the service down?"""
 
