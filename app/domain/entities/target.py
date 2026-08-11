@@ -1,6 +1,8 @@
+from functools import cached_property
+
 from pydantic import BaseModel, NegativeInt, PositiveInt, computed_field
 
-from app.domain.enums.attack import AttackType
+from app.domain.enums import AttackType
 from app.domain.exceptions import ScheduleNotInitializedError, TargetNotPersistedError
 from app.domain.values.database_id import DatabaseId
 
@@ -23,6 +25,21 @@ class Target(BaseModel):
             for tick, requests in entries.items()
         }
         return result
+    @computed_field
+    @cached_property
+    def vulns(self) -> int | None:
+        pass
+
+    def upsert_schedule(self, entries: dict[int, list[int]]) -> int:
+        """
+        Creates or updates the attack schedule.
+        """
+        entries_inserted: list[bool] = []
+        inserted = False
+        for tick, entry in entries.items():
+            entries_inserted.append(self.upsert_schedule_entry(tick, entry))
+
+        return inserted
 
     def upsert_schedule_entry(self, tick: int, requests: list[int]) -> bool:
         if self.schedule is None:
@@ -32,12 +49,25 @@ class Target(BaseModel):
 
         return self.schedule.upsert_entry(tick, requests)
 
-    def init_schedule(self):
+    def init_schedule(self, entries: dict[int, list[int]] | None = None) -> int | None:
         if self.id is None:
             raise TargetNotPersistedError(
                 "Target must have a valid database ID before initializing schedule"
             )
         self.schedule = AttackSchedule(target_id=self.id)
+
+        if entries is None:
+            return None
+
+        return self.upsert_schedule(entries)
+
+    def at_tick(self, tick: int) -> list["TargetAttack"] | None:
+        if self.schedule is None:
+            raise ScheduleNotInitializedError(
+                "Target schedule must be initialized before obtaining attack lists"
+            )
+
+        return self.schedule.at_tick(tick)
 
 
 NonZeroInt = PositiveInt | NegativeInt
